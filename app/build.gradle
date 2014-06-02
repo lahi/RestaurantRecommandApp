@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:19.1.0'
     compile 'com.android.support:support-v4:19.1.0'
     compile 'com.google.android.gms:play-services:4.2.42'
+    compile 'com.mcxiaoke.volley:library:1.0.+'
 }

@@ -2,17 +2,23 @@
 <pre-dex-items>
 
     <item
-        dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/pre-dexed/debug/classes-b71881eb6bfdd083d6bd4d0e714236d15fb019a8.jar"
-        jar="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/classes.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
-    <item
         dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/pre-dexed/debug/classes-2a3516c5e3183c68e0217edc55122616eb583342.jar"
         jar="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/build/exploded-aar/com.google.android.gms/play-services/4.2.42/classes.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="e5f81129dfb3d02df80126512bc98278ed2bb40a"/>
+    <item
+        dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/pre-dexed/debug/library-1.0.4-7c05468cc4d99d1939cde2d0cbaa7c640e1547cf.jar"
+        jar="/Users/sooyoungbyun/.gradle/caches/modules-2/files-2.1/com.mcxiaoke.volley/library/1.0.4/ffde3e41015ebc7accc1f3d3bf17b8b5f9695b05/library-1.0.4.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="ffde3e41015ebc7accc1f3d3bf17b8b5f9695b05"/>
+    <item
+        dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/pre-dexed/debug/classes-b71881eb6bfdd083d6bd4d0e714236d15fb019a8.jar"
+        jar="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/build/exploded-aar/com.android.support/appcompat-v7/19.1.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
     <item
         dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/pre-dexed/debug/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
         jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"

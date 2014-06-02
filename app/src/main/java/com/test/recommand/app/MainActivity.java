@@ -5,6 +5,8 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 
+import com.android.volley.toolbox.Volley;
+
 /**
  * Created by sooyoungbyun on 2014. 6. 2..
  */
@@ -17,6 +19,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
+
+            // map
             mFragment = new MapsActivity();
 
             LinearLayout fragContainer = (LinearLayout) findViewById(R.id.map_fragment_container);
@@ -31,7 +35,7 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onResume() {
+
         super.onResume();
     }
-
 }
