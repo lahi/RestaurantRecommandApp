@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RestaurantRecommandApp</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="google_maps_key">AIzaSyCpPw-jTKGd0G2QlFN1aqCgtbWi0Az0dwM</string>
+
+</resources>
