@@ -11,6 +11,7 @@ import android.util.Log;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -72,7 +73,14 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
 
         LatLng latLng = new LatLng(latitude, longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latLng)
+                .zoom(15)                   // Sets the zoom
+                .bearing(0)                // Sets the orientation of the camera to east
+                .tilt(30)                   // Sets the tilt of the camera to 30 degrees
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
     }
 
@@ -90,4 +98,5 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
     public void onProviderDisabled(String provider) {
         Log.d(mTag, "onProviderDisabled");
     }
+
 }
