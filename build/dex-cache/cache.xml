@@ -2,6 +2,12 @@
 <pre-dex-items>
 
     <item
+        dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/pre-dexed/debug/simple-xml-2.7.1-560a767bd3bce247c68eadfc0be86ccba4e22849.jar"
+        jar="/Users/sooyoungbyun/.gradle/caches/modules-2/files-2.1/org.simpleframework/simple-xml/2.7.1/dd91fb744c2ff921407475cb29a1e3fee397d411/simple-xml-2.7.1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="dd91fb744c2ff921407475cb29a1e3fee397d411"/>
+    <item
         dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/pre-dexed/debug/classes-2a3516c5e3183c68e0217edc55122616eb583342.jar"
         jar="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/build/exploded-aar/com.google.android.gms/play-services/4.2.42/classes.jar"
         jumboMode="false"

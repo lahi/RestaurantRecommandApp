@@ -23,12 +23,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.test.recommand.model.RssType;
 
-import org.json.JSONObject;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Locale;
 
@@ -163,6 +163,14 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
             public void onResponse(String response) {
 
                 Log.i(mTag, "response : " + response.toString());
+
+                Serializer serializer = new Persister();
+                try {
+                    RssType rssType = serializer.read(RssType.class, response);
+                    Log.d(mTag, "title: " + rssType.getChannel().getItemList().get(0).getTitle());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
 
