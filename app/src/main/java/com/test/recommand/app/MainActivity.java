@@ -5,8 +5,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 
-import com.android.volley.toolbox.Volley;
-
 /**
  * Created by sooyoungbyun on 2014. 6. 2..
  */
