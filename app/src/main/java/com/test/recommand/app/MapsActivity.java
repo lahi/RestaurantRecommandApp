@@ -6,11 +6,16 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,7 +24,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Locale;
 
@@ -123,18 +132,47 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(this, Locale.getDefault());
+        String thorough = "강남구";
         try {
             Log.d(mTag, "lat : " + position.latitude + "longitude : " + position.longitude);
             addresses = geocoder.getFromLocation(position.latitude, position.longitude, 1);
 
             String address = addresses.get(0).getAddressLine(0);
-            String thorough = addresses.get(0).getThoroughfare();
+            thorough = addresses.get(0).getThoroughfare();
 
             Log.d(mTag, "address list" + addresses);
             Log.d(mTag, "address :" + address + " 동 : " + thorough);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //request
+        String url = Uri.parse("http://openapi.naver.com/search")
+                .buildUpon()
+                .appendQueryParameter("key", "c83cbb516fb18f80ba9243ff2af08ced")
+                .appendQueryParameter("query", thorough+"맛집")
+                .appendQueryParameter("target", "local")
+                .appendQueryParameter("start", "1")
+                .appendQueryParameter("display", "10")
+                .build().toString();
+        Log.d(mTag, "url : " + url);
+
+        StringRequest jr = new StringRequest(Request.Method.POST, url ,new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                Log.i(mTag, "response : " + response.toString());
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.i(mTag, "error" + volleyError.getMessage());
+            }
+        });
+
+        mRequestQueue.add(jr);
 
     }
 
