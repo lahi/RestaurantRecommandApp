@@ -7,9 +7,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,36 +37,47 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsFragment extends FragmentActivity implements LocationListener {
+public class MapsFragment extends Fragment implements LocationListener {
+
+    private FragmentActivity context;
+
+    public interface OnUpdate {
+        void update(RssType rssType);
+    }
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private RequestQueue mRequestQueue;
 
-    final private static String mTag = "Map_Log";
+    final private static String mTag = "MapLog";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+    OnUpdate onUpdate;
 
-        if (mRequestQueue == null) {
-            mRequestQueue =  Volley.newRequestQueue(this);
-        }
-
-        setUpMapIfNeeded();
+    public MapsFragment setUpdateListener (OnUpdate updateListener) {
+        onUpdate = updateListener;
+        return this;
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        context = (FragmentActivity)container.getContext();
+
+        if (mRequestQueue == null) {
+            mRequestQueue =  Volley.newRequestQueue(context);
+        }
+
         setUpMapIfNeeded();
+
+        return  null;
     }
 
     public void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+
+            mMap = ((SupportMapFragment) context.getSupportFragmentManager().findFragmentById(R.id.map))
                     .getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
@@ -73,7 +88,7 @@ public class MapsFragment extends FragmentActivity implements LocationListener {
 
     private void setUpMap() {
 
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         String provider = locationManager.getBestProvider(criteria, true);
         Location location = locationManager.getLastKnownLocation(provider);
@@ -94,6 +109,7 @@ public class MapsFragment extends FragmentActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
 
+        //현재 위치랑 바뀐 위치 diff 비교 추가해야함
         Log.d(mTag, "on location changed");
 
         double latitude = location.getLatitude();
@@ -132,7 +148,7 @@ public class MapsFragment extends FragmentActivity implements LocationListener {
         // get location address name
         Geocoder geocoder;
         List<Address> addresses;
-        geocoder = new Geocoder(this, Locale.getDefault());
+        geocoder = new Geocoder(context, Locale.getDefault());
         String thorough = "강남구";
         try {
             Log.d(mTag, "lat : " + position.latitude + "longitude : " + position.longitude);
@@ -169,6 +185,8 @@ public class MapsFragment extends FragmentActivity implements LocationListener {
                 try {
                     RssType rssType = serializer.read(RssType.class, response);
                     Log.d(mTag, "title: " + rssType.getChannel().getItemList().get(0).getTitle());
+                    onUpdate.update(rssType);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
