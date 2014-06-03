@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,7 +28,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.soo.util.GeoCoordTranslate;
 import com.test.recommand.app.R;
+import com.test.recommand.model.ItemType;
 import com.test.recommand.model.RssType;
 
 import org.simpleframework.xml.Serializer;
@@ -103,6 +106,19 @@ public class MapsFragment extends Fragment implements LocationListener {
 
         requestNearRestaurant(position);
 
+    }
+
+    private  void updateMap(List<ItemType> itemList) {
+
+        for (ItemType item : itemList) {
+            LatLng position = new LatLng(Double.valueOf(item.getMapx()).doubleValue(), Double.valueOf(item.getMapy()).doubleValue());
+            Log.d(mTag, "position : " + position.longitude + "latttt : " +  position.latitude );
+
+            GeoCoordTranslate trans = new GeoCoordTranslate(context);
+            trans.GeoCoordTranslateAddressToLatLng(item.getAddress());
+
+            mMap.addMarker(new MarkerOptions().position(position).title(item.getTitle()));
+        }
     }
 
 
@@ -184,8 +200,9 @@ public class MapsFragment extends Fragment implements LocationListener {
                 Serializer serializer = new Persister();
                 try {
                     RssType rssType = serializer.read(RssType.class, response);
-                    Log.d(mTag, "title: " + rssType.getChannel().getItemList().get(0).getTitle());
+                    Log.d(mTag, "link: " + rssType.getChannel().getItemList().get(0).getLink());
                     onUpdate.update(rssType);
+                    updateMap(rssType.getChannel().getItemList());
 
                 } catch (Exception e) {
                     e.printStackTrace();

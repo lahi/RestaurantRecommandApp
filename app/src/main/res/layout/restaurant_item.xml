@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:orientation="vertical" android:layout_width="match_parent"
-android:layout_height="match_parent">
+android:layout_height="60dp">
+
+<ImageView
+    android:id="@+id/restaurant_img"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent" />
 
 <TextView
     android:id="@+id/restaurant_item_name"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textSize="18sp" />
+    android:layout_height="match_parent"
+    android:layout_alignLeft="@+id/restaurant_img"
+    android:textSize="20dp" />
 
-</LinearLayout>
+</RelativeLayout>
