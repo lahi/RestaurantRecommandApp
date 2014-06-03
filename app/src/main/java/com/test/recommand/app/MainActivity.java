@@ -5,12 +5,14 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 
+import com.test.recommand.view.MapsFragment;
+
 /**
  * Created by sooyoungbyun on 2014. 6. 2..
  */
 public class MainActivity extends Activity {
 
-    private MapsActivity mFragment;
+    private MapsFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +21,7 @@ public class MainActivity extends Activity {
         if (savedInstanceState == null) {
 
             // map
-            mFragment = new MapsActivity();
+            mFragment = new MapsFragment();
 
             LinearLayout fragContainer = (LinearLayout) findViewById(R.id.map_fragment_container);
 

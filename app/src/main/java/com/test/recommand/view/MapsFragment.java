@@ -1,4 +1,4 @@
-package com.test.recommand.app;
+package com.test.recommand.view;
 
 import android.location.Address;
 import android.location.Criteria;
@@ -23,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.test.recommand.app.R;
 import com.test.recommand.model.RssType;
 
 import org.simpleframework.xml.Serializer;
@@ -32,7 +33,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsActivity extends FragmentActivity implements LocationListener {
+public class MapsFragment extends FragmentActivity implements LocationListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private RequestQueue mRequestQueue;
