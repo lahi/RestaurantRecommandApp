@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -110,14 +110,22 @@ public class MapsFragment extends Fragment implements LocationListener {
 
     private  void updateMap(List<ItemType> itemList) {
 
-        for (ItemType item : itemList) {
-            LatLng position = new LatLng(Double.valueOf(item.getMapx()).doubleValue(), Double.valueOf(item.getMapy()).doubleValue());
-            Log.d(mTag, "position : " + position.longitude + "latttt : " +  position.latitude );
+        for (final ItemType item : itemList) {
 
+            //add restaurant marker
             GeoCoordTranslate trans = new GeoCoordTranslate(context);
             trans.GeoCoordTranslateAddressToLatLng(item.getAddress());
+            trans.setUpdateListener( new GeoCoordTranslate.OnGeoCodeUpdate() {
+                @Override
+                public void update(LatLng geocode) {
+                    mMap.addMarker(new MarkerOptions()
+                            .position(geocode)
+                            .title(item.getTitle())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                            .alpha(0.7f));
+                }
+            });
 
-            mMap.addMarker(new MarkerOptions().position(position).title(item.getTitle()));
         }
     }
 
@@ -200,7 +208,6 @@ public class MapsFragment extends Fragment implements LocationListener {
                 Serializer serializer = new Persister();
                 try {
                     RssType rssType = serializer.read(RssType.class, response);
-                    Log.d(mTag, "link: " + rssType.getChannel().getItemList().get(0).getLink());
                     onUpdate.update(rssType);
                     updateMap(rssType.getChannel().getItemList());
 

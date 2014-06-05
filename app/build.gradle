@@ -32,4 +32,6 @@ dependencies {
         exclude module: 'stax-api'
         exclude module: 'xpp3'
     }
+    compile 'com.fasterxml.jackson.core:jackson-core:2.1.+'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.1.+'
 }
