@@ -112,19 +112,23 @@ public class MapsFragment extends Fragment implements LocationListener {
 
         for (final ItemType item : itemList) {
 
-            //add restaurant marker
-            GeoCoordTranslate trans = new GeoCoordTranslate(context);
-            trans.GeoCoordTranslateAddressToLatLng(item.getAddress());
-            trans.setUpdateListener( new GeoCoordTranslate.OnGeoCodeUpdate() {
-                @Override
-                public void update(LatLng geocode) {
-                    mMap.addMarker(new MarkerOptions()
-                            .position(geocode)
-                            .title(item.getTitle())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                            .alpha(0.7f));
-                }
-            });
+            try {
+                //add restaurant marker
+                GeoCoordTranslate trans = new GeoCoordTranslate(context);
+                trans.GeoCoordTranslateAddressToLatLng(item.getAddress());
+                trans.setUpdateListener( new GeoCoordTranslate.OnGeoCodeUpdate() {
+                    @Override
+                    public void update(LatLng geocode) {
+                        mMap.addMarker(new MarkerOptions()
+                                .position(geocode)
+                                .title(item.getTitle())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                                .alpha(0.7f));
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
     }

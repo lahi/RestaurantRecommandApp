@@ -16,6 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.test.recommand.app.RestaurantActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
