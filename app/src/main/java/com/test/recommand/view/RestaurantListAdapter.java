@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.test.recommand.app.R;
 import com.test.recommand.model.ItemType;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -51,6 +53,7 @@ public class RestaurantListAdapter extends BaseAdapter {
             convertView.setTag(h);
 
             h.name = (TextView) convertView.findViewById(R.id.restaurant_item_name);
+            h.category = (TextView) convertView.findViewById(R.id.rescourant_category);
         } else {
             h = (Holder) convertView.getTag();
         }
@@ -61,11 +64,13 @@ public class RestaurantListAdapter extends BaseAdapter {
         }
 
         h.name.setText(model.getTitle());
+        h.category.setText(model.getCategory());
 
         return convertView;
     }
 
     private class Holder {
         TextView name;
+        TextView category;
     }
 }

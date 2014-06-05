@@ -173,12 +173,16 @@ public class MapsFragment extends Fragment implements LocationListener {
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(context, Locale.getDefault());
-        String thorough = "강남구";
+        String locality = "";
+        String thorough = "";
+
         try {
             Log.d(mTag, "lat : " + position.latitude + "longitude : " + position.longitude);
             addresses = geocoder.getFromLocation(position.latitude, position.longitude, 1);
 
             String address = addresses.get(0).getAddressLine(0);
+
+            locality = addresses.get(0).getLocality();
             thorough = addresses.get(0).getThoroughfare();
 
             Log.d(mTag, "address list" + addresses);
@@ -191,10 +195,10 @@ public class MapsFragment extends Fragment implements LocationListener {
         String url = Uri.parse("http://openapi.naver.com/search")
                 .buildUpon()
                 .appendQueryParameter("key", "c83cbb516fb18f80ba9243ff2af08ced")
-                .appendQueryParameter("query", thorough+"맛집")
+                .appendQueryParameter("query", locality + " " + thorough + " 맛집")
                 .appendQueryParameter("target", "local")
                 .appendQueryParameter("start", "1")
-                .appendQueryParameter("display", "10")
+                .appendQueryParameter("display", "30")
                 .build().toString();
         Log.d(mTag, "url : " + url);
 
