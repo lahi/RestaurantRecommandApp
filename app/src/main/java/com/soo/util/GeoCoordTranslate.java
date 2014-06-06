@@ -23,7 +23,7 @@ import java.io.IOException;
  */
 public class GeoCoordTranslate {
 
-
+    final private String mTag = "geo";
 
     public interface OnGeoCodeUpdate {
         void update(LatLng geocode);
@@ -58,6 +58,8 @@ public class GeoCoordTranslate {
             @Override
             public void onResponse(JSONObject response) {
 
+                Log.d(mTag, "Response : " + response);
+
                 ObjectMapper om = new ObjectMapper();
 
                 // JSON 문자열을 xml 다루는것과 비슷하게 트리로 맨들어서 트래버싱하기(Tree Model)
@@ -65,11 +67,17 @@ public class GeoCoordTranslate {
                 try {
                     root = om.readTree(response.toString());
 
-                    Double lat = root.findPath("location").get("lat").asDouble();
-                    Double lng = root.findPath("location").get("lng").asDouble();
-                    LatLng geocode = new LatLng(lat.doubleValue(), lng.doubleValue());
+                    if (root.findValue("error_message") == null) {
 
-                    onGeoCodeUpdate.update(geocode);
+                        Double lat = root.findPath("location").get("lat").asDouble();
+                        Double lng = root.findPath("location").get("lng").asDouble();
+                        LatLng geocode = new LatLng(lat.doubleValue(), lng.doubleValue());
+
+                        onGeoCodeUpdate.update(geocode);
+                    } else {
+                        Log.d(mTag, "Error : " + root.findPath("error_message").get("error_message").toString());
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -80,7 +88,7 @@ public class GeoCoordTranslate {
 
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.i("tag", "error" + volleyError.getMessage());
+                Log.i(mTag, "error" + volleyError.getMessage());
             }
         });
 

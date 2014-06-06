@@ -110,9 +110,9 @@ public class MapsFragment extends Fragment implements LocationListener {
 
     private  void updateMap(List<ItemType> itemList) {
 
-        for (final ItemType item : itemList) {
+        try {
+            for (final ItemType item : itemList) {
 
-            try {
                 //add restaurant marker
                 GeoCoordTranslate trans = new GeoCoordTranslate(context);
                 trans.GeoCoordTranslateAddressToLatLng(item.getAddress());
@@ -126,10 +126,9 @@ public class MapsFragment extends Fragment implements LocationListener {
                                 .alpha(0.7f));
                     }
                 });
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
