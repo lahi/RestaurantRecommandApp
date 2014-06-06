@@ -27,6 +27,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.soo.util.GeoCoordTranslate;
 import com.test.recommand.app.R;
@@ -40,12 +41,16 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsFragment extends Fragment implements LocationListener {
+public class MapsFragment extends Fragment implements LocationListener, GoogleMap.OnMarkerClickListener {
 
     private FragmentActivity context;
 
     public interface OnUpdate {
         void update(RssType rssType);
+    }
+
+    public interface OnMarkerClicked {
+        void updateList(String title);
     }
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
@@ -54,9 +59,15 @@ public class MapsFragment extends Fragment implements LocationListener {
     final private static String mTag = "MapLog";
 
     OnUpdate onUpdate;
+    OnMarkerClicked markerClicked;
 
     public MapsFragment setUpdateListener (OnUpdate updateListener) {
         onUpdate = updateListener;
+        return this;
+    }
+
+    public MapsFragment setUpdateMarkerClickListener (OnMarkerClicked markerClickListener) {
+        markerClicked = markerClickListener;
         return this;
     }
 
@@ -102,8 +113,8 @@ public class MapsFragment extends Fragment implements LocationListener {
         locationManager.requestLocationUpdates(provider, 20000, 0, this);
 
         LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(position).title("Marker"));
-
+        mMap.addMarker(new MarkerOptions().position(position).title("현재 위치"));
+        mMap.setOnMarkerClickListener(this);
         requestNearRestaurant(position);
 
     }
@@ -116,6 +127,7 @@ public class MapsFragment extends Fragment implements LocationListener {
                 //add restaurant marker
                 GeoCoordTranslate trans = new GeoCoordTranslate(context);
                 trans.GeoCoordTranslateAddressToLatLng(item.getAddress());
+
                 trans.setUpdateListener( new GeoCoordTranslate.OnGeoCodeUpdate() {
                     @Override
                     public void update(LatLng geocode) {
@@ -132,6 +144,16 @@ public class MapsFragment extends Fragment implements LocationListener {
         }
     }
 
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Log.d(mTag, "marker : " + marker);
+
+        marker.showInfoWindow();
+        markerClicked.updateList(marker.getTitle());
+
+        return true;
+    }
 
     @Override
     public void onLocationChanged(Location location) {

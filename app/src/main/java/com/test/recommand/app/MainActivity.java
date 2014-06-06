@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -18,10 +19,11 @@ import java.util.List;
 /**
  * Created by sooyoungbyun on 2014. 6. 2..
  */
-public class MainActivity extends ActionBarActivity implements MapsFragment.OnUpdate {
+public class MainActivity extends ActionBarActivity implements MapsFragment.OnUpdate, MapsFragment.OnMarkerClicked {
 
     private MapsFragment mFragment;
     private ListView mListView;
+    private List<ItemType> restaurantList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class MainActivity extends ActionBarActivity implements MapsFragment.OnUp
 
             // map
             mFragment = new MapsFragment().setUpdateListener(this);
+            mFragment.setUpdateMarkerClickListener(this);
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.map_fragment_container, mFragment)
@@ -49,17 +52,18 @@ public class MainActivity extends ActionBarActivity implements MapsFragment.OnUp
     @Override
     public void update(RssType rssType) {
 
-        updateListView(rssType);
+        restaurantList = rssType.getChannel().getItemList();
+        updateListView();
 
     }
 
-    private void updateListView(final RssType rssType) {
+    private void updateListView() {
         if (mListView == null) {
             mListView = (ListView) findViewById(R.id.restaurant_list_view);
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    List<ItemType> restaurantList = rssType.getChannel().getItemList();
+
                     ItemType item = restaurantList.get(position);
 
                     try {
@@ -81,7 +85,24 @@ public class MainActivity extends ActionBarActivity implements MapsFragment.OnUp
             });
         }
 
-        RestaurantListAdapter adapter = new RestaurantListAdapter(this, R.layout.restaurant_item, rssType.getChannel().getItemList());
+        RestaurantListAdapter adapter = new RestaurantListAdapter(this, R.layout.restaurant_item, restaurantList);
         mListView.setAdapter(adapter);
+    }
+
+    @Override
+    public void updateList(String title) {
+        Log.d("activity", "title : " + title);
+
+        for (int i = 0; i < restaurantList.size(); i++) {
+            ItemType item = restaurantList.get(i);
+            if (item.getTitle().equals(title)) {
+
+                ((RestaurantListAdapter)mListView.getAdapter()).setSelectedPosition(i);
+                mListView.setSelection(((i-2) < 0 )? i : i-2);
+                mListView.requestFocus();
+
+                break;
+            }
+        }
     }
 }
