@@ -65,19 +65,26 @@ public class MainActivity extends ActionBarActivity implements MapsFragment.OnUp
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     ItemType item = restaurantList.get(position);
+                    String openLink = item.getLink();
 
                     try {
-                        String openLink = Uri.parse("http://cafeblog.search.naver.com/search.naver")
-                                .buildUpon()
-                                .appendQueryParameter("query", item.getTitle() + " " + item.getCategory())
-                                .appendQueryParameter("where", "post")
-                                .appendQueryParameter("ie", "utf8")
-                                .build().toString();
+                        if (openLink == null) {
+                            openLink = Uri.parse("http://cafeblog.search.naver.com/search.naver")
+                                    .buildUpon()
+                                    .appendQueryParameter("query", item.getTitle() + " " + item.getCategory())
+                                    .appendQueryParameter("where", "post")
+                                    .appendQueryParameter("ie", "utf8")
+                                    .build().toString();
+                        }
 
                         // open
                         Intent intent = new Intent(MainActivity.this, RestaurantActivity.class);
                         intent.putExtra("openUrl", openLink);
                         startActivity(intent);
+
+                        //reset
+                        mListView.setSelection(-1);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

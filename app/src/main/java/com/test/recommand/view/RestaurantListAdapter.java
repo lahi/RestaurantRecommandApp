@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.test.recommand.app.R;
@@ -76,12 +77,13 @@ public class RestaurantListAdapter extends BaseAdapter {
             return convertView;
         }
 
-        h.name.setBackgroundResource(R.color.white);
+        convertView.setBackgroundColor(context.getResources().getColor(R.color.white));
         h.name.setTextColor(context.getResources().getColor(R.color.common_signin_btn_text_light));
-        h.category.setBackgroundResource(R.color.white);
         h.category.setTextColor(context.getResources().getColor(R.color.common_action_bar_splitter));
 
         if (selectedPosition == position) {
+
+            final View backgroundView = convertView;
 
             Integer colorFrom = context.getResources().getColor(R.color.white);
             Integer colorTo = context.getResources().getColor(R.color.darkorange);
@@ -90,9 +92,8 @@ public class RestaurantListAdapter extends BaseAdapter {
 
                 @Override
                 public void onAnimationUpdate(ValueAnimator animator) {
-                    h.name.setBackgroundColor((Integer)animator.getAnimatedValue());
+                    backgroundView.setBackgroundColor((Integer)animator.getAnimatedValue());
                     h.name.setTextColor(context.getResources().getColor(R.color.white));
-                    h.category.setBackgroundColor((Integer)animator.getAnimatedValue());
                     h.category.setTextColor(context.getResources().getColor(R.color.white));
                 }
 
