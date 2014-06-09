@@ -26,14 +26,9 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
 
         if (position == 0) {
             return new RestaurantMapFragment();
+        } else {
+            return new TweetListFragment();
         }
-
-        Fragment fragment = new MainObjectFragment();
-        Bundle args = new Bundle();
-        // Our object is just an integer :-P
-        args.putInt(MainObjectFragment.ARG_OBJECT, position + 1);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -49,26 +44,5 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
         } else {
             return "맛집 트윗";
         }
-    }
-}
-
-class MainObjectFragment extends Fragment {
-    public static final String ARG_OBJECT = "object";
-
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        // The last two arguments ensure LayoutParams are inflated
-        // properly.
-        View rootView;
-        Bundle args = getArguments();
-
-        if (args.getInt(ARG_OBJECT) == 1) {
-            rootView = inflater.inflate( R.layout.map_fragment, container, false);
-        } else {
-            rootView = inflater.inflate( R.layout.tweet_fragment, container, false);
-        }
-
-        return rootView;
     }
 }

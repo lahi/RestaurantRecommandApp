@@ -18,6 +18,10 @@
         </activity>
         <activity android:name="com.test.recommand.app.RestaurantActivity"/>
 
+        <service
+            android:name="com.test.recommand.service.TweetPullService"
+            android:exported="false"/>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
