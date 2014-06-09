@@ -41,9 +41,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import static java.lang.Math.abs;
+
 public class MapsFragment extends Fragment implements LocationListener, GoogleMap.OnMarkerClickListener {
 
     private FragmentActivity context;
+
+    private double currLatitude;
+    private double currLongitude;
 
     public interface OnUpdate {
         void update(RssType rssType);
@@ -111,12 +116,6 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
         }
 
         locationManager.requestLocationUpdates(provider, 20000, 0, this);
-
-        LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(position).title("현재 위치"));
-        mMap.setOnMarkerClickListener(this);
-        requestNearRestaurant(position);
-
     }
 
     private  void updateMap(List<ItemType> itemList) {
@@ -158,11 +157,21 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
     @Override
     public void onLocationChanged(Location location) {
 
-        //현재 위치랑 바뀐 위치 diff 비교 추가해야함
-        Log.d(mTag, "on location changed");
-
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
+
+        if ((abs(latitude - currLatitude) < 10) && (abs(longitude - currLongitude) < 10))
+            return;
+
+        currLatitude = latitude;
+        currLongitude = longitude;
+
+        Log.d(mTag, "on location changed");
+
+        LatLng position = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(position).title("현재 위치"));
+        mMap.setOnMarkerClickListener(this);
+        requestNearRestaurant(position);
 
         LatLng latLng = new LatLng(latitude, longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
