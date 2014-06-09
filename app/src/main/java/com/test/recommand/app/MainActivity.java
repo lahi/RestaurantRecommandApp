@@ -1,8 +1,12 @@
 package com.test.recommand.app;
 
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.widget.ListView;
 
 import com.test.recommand.model.ItemType;
 import com.test.recommand.model.RssType;
+import com.test.recommand.view.MainPagerAdapter;
 import com.test.recommand.view.MapsFragment;
 import com.test.recommand.view.RestaurantListAdapter;
 
@@ -19,97 +24,65 @@ import java.util.List;
 /**
  * Created by sooyoungbyun on 2014. 6. 2..
  */
-public class MainActivity extends ActionBarActivity implements MapsFragment.OnUpdate, MapsFragment.OnMarkerClicked {
+public class MainActivity extends FragmentActivity  {
 
-    private MapsFragment mFragment;
-    private ListView mListView;
-    private List<ItemType> restaurantList;
+    MainPagerAdapter mMainCollectionPagerAdapter;
+    ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState == null) {
-
-            // map
-            mFragment = new MapsFragment().setUpdateListener(this);
-            mFragment.setUpdateMarkerClickListener(this);
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.map_fragment_container, mFragment)
-                    .commit();
-        }
-
         setContentView(R.layout.main_activity);
+
+        final ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        //view pager
+        mMainCollectionPagerAdapter =
+                new MainPagerAdapter(this.getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.main_pager);
+        mViewPager.setAdapter(mMainCollectionPagerAdapter);
+        mViewPager.setOnPageChangeListener(
+                new ViewPager.SimpleOnPageChangeListener() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        // When swiping between pages, select the
+                        // corresponding tab.
+                        getActionBar().setSelectedNavigationItem(position);
+                    }
+                });
+
+        //tab
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // show the given tab
+                mViewPager.setCurrentItem(tab.getPosition());
+                actionBar.setTitle(mMainCollectionPagerAdapter.getPageTitle(tab.getPosition()));
+            }
+
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // hide the given tab
+            }
+
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                // probably ignore this event
+            }
+        };
+
+        // Add 3 tabs, specifying the tab's text and TabListener
+        for (int i = 0; i < 2; i++) {
+            actionBar.addTab(
+                    actionBar.newTab()
+                            .setText(mMainCollectionPagerAdapter.getPageTitle(i))
+                            .setTabListener(tabListener));
+        }
     }
 
     @Override
     protected void onResume() {
 
         super.onResume();
-    }
-
-    @Override
-    public void update(RssType rssType) {
-
-        restaurantList = rssType.getChannel().getItemList();
-        updateListView();
-
-    }
-
-    private void updateListView() {
-        if (mListView == null) {
-            mListView = (ListView) findViewById(R.id.restaurant_list_view);
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    ItemType item = restaurantList.get(position);
-                    String openLink = item.getLink();
-
-                    try {
-                        if (openLink == null) {
-                            openLink = Uri.parse("http://cafeblog.search.naver.com/search.naver")
-                                    .buildUpon()
-                                    .appendQueryParameter("query", item.getTitle() + " " + item.getCategory())
-                                    .appendQueryParameter("where", "post")
-                                    .appendQueryParameter("ie", "utf8")
-                                    .build().toString();
-                        }
-
-                        // open
-                        Intent intent = new Intent(MainActivity.this, RestaurantActivity.class);
-                        intent.putExtra("openUrl", openLink);
-                        startActivity(intent);
-
-                        //reset
-                        mListView.setSelection(-1);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-
-        RestaurantListAdapter adapter = new RestaurantListAdapter(this, R.layout.restaurant_item, restaurantList);
-        mListView.setAdapter(adapter);
-    }
-
-    @Override
-    public void updateList(String title) {
-        Log.d("activity", "title : " + title);
-
-        for (int i = 0; i < restaurantList.size(); i++) {
-            ItemType item = restaurantList.get(i);
-            if (item.getTitle().equals(title)) {
-
-                ((RestaurantListAdapter)mListView.getAdapter()).setSelectedPosition(i);
-                mListView.setSelection(((i-2) < 0 )? i : i-2);
-                mListView.requestFocus();
-
-                break;
-            }
-        }
     }
 }
