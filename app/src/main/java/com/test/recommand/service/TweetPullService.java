@@ -1,8 +1,10 @@
 package com.test.recommand.service;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 import android.util.Log;
 
@@ -26,9 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by sooyoungbyun on 2014. 6. 9..
- */
 public class TweetPullService extends IntentService {
 
     final static String mTag = "TweetPullService";
@@ -38,6 +37,8 @@ public class TweetPullService extends IntentService {
 
     final static String TwitterTokenURL = "https://api.twitter.com/oauth2/token";
     final static String TwitterSearchURL = "https://api.twitter.com/1.1/search/tweets.json";
+
+    private Context mContext;
 
     private RequestQueue mRequestQueue;
     private Intent mIntent;
@@ -50,6 +51,8 @@ public class TweetPullService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent workIntent) {
+
+        mContext = this;
 
         if (mRequestQueue == null) {
             mRequestQueue =  Volley.newRequestQueue(getApplicationContext());
@@ -173,6 +176,11 @@ public class TweetPullService extends IntentService {
                         tweetList.add(tw);
                     }
 
+                    //send event
+                    Intent localIntent =
+                            new Intent(Constants.BROADCAST_STATUS_UPDATE).putExtra(Constants.DATA_RESTAURANT_TWEET_LIST, tweetList);
+                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(localIntent);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -199,3 +207,4 @@ public class TweetPullService extends IntentService {
         mRequestQueue.add(streamRequest);
     }
 }
+
