@@ -103,6 +103,7 @@ public class TweetListFragment extends Fragment {
                 mServiceIntent.putExtra("query", "맛집");
                 mServiceIntent.putExtra("latitude", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LATITUDE));
                 mServiceIntent.putExtra("longitude", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LONGITUDE));
+                mServiceIntent.putExtra("locality", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LOCALITY));
                 getActivity().startService(mServiceIntent);
             }
 

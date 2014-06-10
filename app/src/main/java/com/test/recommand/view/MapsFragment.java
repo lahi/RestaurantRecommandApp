@@ -188,12 +188,6 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
                 .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-        //send event
-        Intent localIntent =
-                new Intent(Constants.BROADCAST_LOCATION_UPDATE).putExtra(Constants.DATA_UPDATE_CURRENT_LATITUDE, "" + currLatitude);
-        localIntent.putExtra(Constants.DATA_UPDATE_CURRENT_LONGITUDE, "" + currLongitude);
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(localIntent);
     }
 
     @Override
@@ -268,6 +262,13 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
         });
 
         mRequestQueue.add(jr);
+
+        //send event
+        Intent localIntent =
+                new Intent(Constants.BROADCAST_LOCATION_UPDATE).putExtra(Constants.DATA_UPDATE_CURRENT_LATITUDE, "" + currLatitude);
+        localIntent.putExtra(Constants.DATA_UPDATE_CURRENT_LONGITUDE, "" + currLongitude);
+        localIntent.putExtra(Constants.DATA_UPDATE_CURRENT_LOCALITY, thorough);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(localIntent);
 
     }
 

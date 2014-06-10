@@ -75,7 +75,7 @@ public class GeoCoordTranslate {
 
                         onGeoCodeUpdate.update(geocode);
                     } else {
-                        Log.d(mTag, "Error : " + root.findPath("error_message").get("error_message").toString());
+                        Log.d(mTag, "Error parsing..");
                     }
 
                 } catch (IOException e) {

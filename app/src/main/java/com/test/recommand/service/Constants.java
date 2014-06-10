@@ -15,6 +15,7 @@ public final class Constants {
 
     public static final String DATA_UPDATE_CURRENT_LONGITUDE = "com.update.location.longitude";
     public static final String DATA_UPDATE_CURRENT_LATITUDE = "com.update.location.latitude";
+    public static final String DATA_UPDATE_CURRENT_LOCALITY = "com.update.location.locality";
 
     // The background thread is doing logging
     public static final int STATE_LOG = -1;
