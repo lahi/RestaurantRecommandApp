@@ -1,5 +1,7 @@
 package com.test.recommand.view;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +25,7 @@ import com.test.recommand.model.RestaurantTweetList;
 import com.test.recommand.service.Constants;
 import com.test.recommand.service.TweetPullService;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -60,6 +63,10 @@ public class TweetListFragment extends Fragment {
     }
 
     private void updateListView(List<RestaurantTweet> itemList) {
+
+        if (itemList.size() == 0)
+            return;
+
         if (mListView == null) {
             mListView = (ListView) getActivity().findViewById(R.id.tweet_list_view);
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -104,6 +111,26 @@ public class TweetListFragment extends Fragment {
                 mServiceIntent.putExtra("latitude", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LATITUDE));
                 mServiceIntent.putExtra("longitude", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LONGITUDE));
                 mServiceIntent.putExtra("locality", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LOCALITY));
+
+                //alarm
+                Calendar cal = Calendar.getInstance();
+                AlarmManager am = (AlarmManager) getActivity().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                long interval = 1000 * 60 * 3; // 3 minutes in milliseconds
+
+                PendingIntent servicePendingIntent =
+                        PendingIntent.getService(getActivity().getApplicationContext(),
+                                TweetPullService.SERVICE_ID, // integer constant used to identify the service
+                                mServiceIntent,
+                                PendingIntent.FLAG_CANCEL_CURRENT);
+
+                am.setRepeating(
+                        AlarmManager.RTC_WAKEUP,
+                        cal.getTimeInMillis(),
+                        interval,
+                        servicePendingIntent
+                );
+
+                //start
                 getActivity().startService(mServiceIntent);
             }
 

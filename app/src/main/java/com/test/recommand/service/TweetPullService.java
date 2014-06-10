@@ -33,6 +33,8 @@ import java.util.Map;
 
 public class TweetPullService extends IntentService {
 
+    public static final int SERVICE_ID = 1000;
+
     final static String mTag = "TweetPullService";
 
     final static String CONSUMER_KEY = "Fzf0yX6zkEy9Xv1HgJd7uw";
@@ -54,7 +56,6 @@ public class TweetPullService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent workIntent) {
-
         mContext = this;
 
         if (mRequestQueue == null) {
@@ -152,7 +153,7 @@ public class TweetPullService extends IntentService {
                 .buildUpon()
                 .appendQueryParameter("q", mIntent.getStringExtra("locality") + " OR " + queryString + " filter:links")
                 .appendQueryParameter("geocode", mIntent.getStringExtra("latitude")+","+mIntent.getStringExtra("longitude")+","+"1000km")
-                .appendQueryParameter("result_type", "mixed")
+                .appendQueryParameter("result_type", "recent")
                 .appendQueryParameter("count","50")
                 .build().toString();
 
@@ -162,6 +163,8 @@ public class TweetPullService extends IntentService {
 
             @Override
             public void onResponse(JSONObject response) {
+
+                Log.d(mTag, "tweet response :: " + response);
 
                 ObjectMapper om = new ObjectMapper();
 
