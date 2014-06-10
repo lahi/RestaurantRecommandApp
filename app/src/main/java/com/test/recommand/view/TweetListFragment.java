@@ -42,13 +42,12 @@ public class TweetListFragment extends Fragment {
 
         if (mServiceIntent == null) {
             mServiceIntent = new Intent(getActivity(), TweetPullService.class);
-            mServiceIntent.putExtra("query", "서교동 맛집");
-            getActivity().startService(mServiceIntent);
         }
 
         if (mStatusIntentFilter == null)
             mStatusIntentFilter = new IntentFilter(Constants.BROADCAST_STATUS_UPDATE);
 
+        mStatusIntentFilter.addAction(Constants.BROADCAST_LOCATION_UPDATE);
         mStatusIntentFilter.addCategory(Intent.CATEGORY_DEFAULT);
 
         // Registers the DownloadStateReceiver and its intent filters
@@ -92,9 +91,20 @@ public class TweetListFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d("Tag", "extra ::: " + intent.getSerializableExtra(Constants.DATA_RESTAURANT_TWEET_LIST));
-            RestaurantTweetList list = (RestaurantTweetList)intent.getSerializableExtra(Constants.DATA_RESTAURANT_TWEET_LIST);
-            updateListView(list.getRestaurantList());
+            Log.d("Update", "action ::" + intent.getAction());
+
+            if (intent.getAction().toString().equals(Constants.BROADCAST_STATUS_UPDATE))  {
+                RestaurantTweetList list = (RestaurantTweetList)intent.getSerializableExtra(Constants.DATA_RESTAURANT_TWEET_LIST);
+                updateListView(list.getRestaurantList());
+            } else if (intent.getAction().toString().equals(Constants.BROADCAST_LOCATION_UPDATE)) {
+
+                getActivity().stopService(mServiceIntent);
+
+                mServiceIntent.putExtra("query", "맛집");
+                mServiceIntent.putExtra("latitude", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LATITUDE));
+                mServiceIntent.putExtra("longitude", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LONGITUDE));
+                getActivity().startService(mServiceIntent);
+            }
 
         }
     }

@@ -1,5 +1,6 @@
 package com.test.recommand.view;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +34,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.soo.util.GeoCoordTranslate;
 import com.test.recommand.app.R;
 import com.test.recommand.model.ItemType;
+import com.test.recommand.model.RestaurantTweetList;
 import com.test.recommand.model.RssType;
+import com.test.recommand.service.Constants;
 
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -168,6 +172,7 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
 
         Log.d(mTag, "on location changed");
 
+        //update
         LatLng position = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(position).title("현재 위치"));
         mMap.setOnMarkerClickListener(this);
@@ -184,6 +189,11 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+        //send event
+        Intent localIntent =
+                new Intent(Constants.BROADCAST_LOCATION_UPDATE).putExtra(Constants.DATA_UPDATE_CURRENT_LATITUDE, "" + currLatitude);
+        localIntent.putExtra(Constants.DATA_UPDATE_CURRENT_LONGITUDE, "" + currLongitude);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(localIntent);
     }
 
     @Override
@@ -214,13 +224,9 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
             Log.d(mTag, "lat : " + position.latitude + "longitude : " + position.longitude);
             addresses = geocoder.getFromLocation(position.latitude, position.longitude, 1);
 
-            String address = addresses.get(0).getAddressLine(0);
-
             locality = addresses.get(0).getLocality();
             thorough = addresses.get(0).getThoroughfare();
 
-            Log.d(mTag, "address list" + addresses);
-            Log.d(mTag, "address :" + address + " 동 : " + thorough);
         } catch (IOException e) {
             e.printStackTrace();
         }

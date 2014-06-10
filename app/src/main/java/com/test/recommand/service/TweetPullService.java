@@ -151,6 +151,7 @@ public class TweetPullService extends IntentService {
         String url = Uri.parse(TwitterSearchURL)
                 .buildUpon()
                 .appendQueryParameter("q", queryString)
+                .appendQueryParameter("geocode", mIntent.getStringExtra("latitude")+","+mIntent.getStringExtra("longitude")+","+"10km")
                 .appendQueryParameter("result_type", "mixed")
                 .appendQueryParameter("count","50")
                 .build().toString();
