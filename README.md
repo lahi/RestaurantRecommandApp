@@ -1,6 +1,8 @@
 RestaurantRecommandApp
 ======================
 
+![alt text](https://github.com/lahi/RestaurantRecommandApp/blob/master/markdown/images/2014-06-10-1.jpg) ![alt text](https://github.com/lahi/RestaurantRecommandApp/blob/master/markdown/images/2014-06-10.jpg) 
+
 스펙 
 --------------------
 
