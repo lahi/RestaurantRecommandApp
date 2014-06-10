@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical" android:layout_width="match_parent"
+android:layout_height="60dp">
+
+<com.android.volley.toolbox.NetworkImageView
+    android:id="@+id/tweet_profile_img"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="10dp"
+    android:gravity="left"/>
+
+<TextView
+    android:id="@+id/tweet_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:textSize="13dp"
+    android:padding="3dp"
+    android:layout_toRightOf="@+id/tweet_profile_img"
+    android:textColor="@color/darkbrown"
+    android:autoLink="web"
+    android:linksClickable="false"
+    android:gravity="left"/>
+</RelativeLayout>

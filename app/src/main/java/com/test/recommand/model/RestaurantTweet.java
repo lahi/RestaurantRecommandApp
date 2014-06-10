@@ -1,12 +1,16 @@
 package com.test.recommand.model;
 
+import java.io.Serializable;
+
 /**
  * Created by sooyoungbyun on 2014. 6. 9..
  */
-public class RestaurantTweet {
+public class RestaurantTweet implements Serializable{
     private String id;
     private String text;
     private String profile_image_url;
+
+    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;

@@ -17,11 +17,14 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.test.recommand.model.RestaurantTweet;
+import com.test.recommand.model.RestaurantTweetList;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -148,6 +151,8 @@ public class TweetPullService extends IntentService {
         String url = Uri.parse(TwitterSearchURL)
                 .buildUpon()
                 .appendQueryParameter("q", queryString)
+                .appendQueryParameter("result_type", "mixed")
+                .appendQueryParameter("count","50")
                 .build().toString();
 
         Log.d(mTag, "url twitter : " + url);
@@ -157,16 +162,15 @@ public class TweetPullService extends IntentService {
             @Override
             public void onResponse(JSONObject response) {
 
-                Log.d(mTag, "response twitter : " + response);
-
                 ObjectMapper om = new ObjectMapper();
 
                 JsonNode root = null;
                 try {
                     root = om.readTree(response.toString());
 
-                    List<JsonNode> tweetJsonList = root.findValues("statuses");
+                    ArrayNode tweetJsonList = (ArrayNode)root.get("statuses");
                     ArrayList<RestaurantTweet> tweetList = new ArrayList<RestaurantTweet>();
+
                     for (JsonNode object : tweetJsonList) {
                         RestaurantTweet tw = new RestaurantTweet();
                         tw.setId(object.findValue("id").asText());
@@ -178,7 +182,7 @@ public class TweetPullService extends IntentService {
 
                     //send event
                     Intent localIntent =
-                            new Intent(Constants.BROADCAST_STATUS_UPDATE).putExtra(Constants.DATA_RESTAURANT_TWEET_LIST, tweetList);
+                            new Intent(Constants.BROADCAST_STATUS_UPDATE).putExtra(Constants.DATA_RESTAURANT_TWEET_LIST, new RestaurantTweetList(tweetList));
                     LocalBroadcastManager.getInstance(mContext).sendBroadcast(localIntent);
 
                 } catch (IOException e) {
