@@ -104,6 +104,7 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
                     .getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
+                mMap.setMyLocationEnabled(true);
                 setUpMap();
             }
         }
@@ -112,14 +113,12 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
     private void setUpMap() {
 
         LocationManager locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        String provider = locationManager.getBestProvider(criteria, true);
-        Location location = locationManager.getLastKnownLocation(provider);
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         if(location!=null){
             onLocationChanged(location);
         }
 
-        locationManager.requestLocationUpdates(provider, 20000, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 20000, 0, this);
     }
 
     private  void updateMap(List<ItemType> itemList) {
