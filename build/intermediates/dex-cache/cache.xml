@@ -26,6 +26,12 @@
         revision="19.1.0"
         sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
     <item
+        dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/intermediates/pre-dexed/debug/Parse-1.5.1-6c253ac71fbc392119c361273c4bb33e23cf842a.jar"
+        jar="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/libs/Parse-1.5.1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3d645417e7780d44f32e29a3ec6b729b75aef26c"/>
+    <item
         dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/intermediates/pre-dexed/debug/simple-xml-2.7.1-560a767bd3bce247c68eadfc0be86ccba4e22849.jar"
         jar="/Users/sooyoungbyun/.gradle/caches/modules-2/files-2.1/org.simpleframework/simple-xml/2.7.1/dd91fb744c2ff921407475cb29a1e3fee397d411/simple-xml-2.7.1.jar"
         jumboMode="false"

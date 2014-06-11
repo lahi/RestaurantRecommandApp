@@ -8,6 +8,11 @@ import android.support.v4.view.ViewPager;
 
 import com.test.recommand.view.MainPagerAdapter;
 
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseInstallation;
+import com.parse.PushService;
+
 /**
  * Created by sooyoungbyun on 2014. 6. 2..
  */
@@ -65,6 +70,11 @@ public class MainActivity extends FragmentActivity  {
                             .setText(mMainCollectionPagerAdapter.getPageTitle(i))
                             .setTabListener(tabListener));
         }
+
+        //parse
+        Parse.initialize(this, "iyM9J8wFfOos3k2Ek94CIKG3r8yUo6W3fWmBN1k1", "KWeXSsYIzG11a3miS71bywxaBuhaQumhPFTsjLPf");
+        PushService.setDefaultPushCallback(this, MainActivity.class);
+        ParseInstallation.getCurrentInstallation().saveInBackground();
     }
 
     @Override
