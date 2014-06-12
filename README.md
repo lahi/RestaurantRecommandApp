@@ -19,3 +19,8 @@ RestaurantRecommandApp
 - https://dev.twitter.com/docs/api/1.1/get/search/tweets
 
 
+Store URL
+--------------------
+https://play.google.com/store/apps/details?id=com.soo.near.restaurant.app
+
+
