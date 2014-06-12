@@ -2,7 +2,6 @@ package com.test.recommand.view;
 
 import android.content.Intent;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,11 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -34,8 +29,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.soo.util.GeoCoordTranslate;
 import com.test.recommand.app.R;
 import com.test.recommand.model.ItemType;
-import com.test.recommand.model.RestaurantTweetList;
 import com.test.recommand.model.RssType;
+import com.test.recommand.network.NetworkManager;
 import com.test.recommand.service.Constants;
 
 import org.simpleframework.xml.Serializer;
@@ -63,7 +58,6 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
     }
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    private RequestQueue mRequestQueue;
 
     final private static String mTag = "MapLog";
 
@@ -85,11 +79,6 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
                              Bundle savedInstanceState) {
 
         context = (FragmentActivity)container.getContext();
-
-        if (mRequestQueue == null) {
-            mRequestQueue =  Volley.newRequestQueue(context);
-        }
-
         setUpMapIfNeeded();
 
         return  null;
@@ -124,11 +113,11 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
     private  void updateMap(List<ItemType> itemList) {
 
         try {
-            for (final ItemType item : itemList) {
+                for (final ItemType item : itemList) {
 
                 //add restaurant marker
-                GeoCoordTranslate trans = new GeoCoordTranslate(context);
-                trans.GeoCoordTranslateAddressToLatLng(item.getAddress());
+                GeoCoordTranslate trans = new GeoCoordTranslate();
+                trans.GeoCoordTranslateAddressToLatLng(getActivity(), item.getAddress());
 
                 trans.setUpdateListener( new GeoCoordTranslate.OnGeoCodeUpdate() {
                     @Override
@@ -235,7 +224,7 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
                 .build().toString();
         Log.d(mTag, "url : " + url);
 
-        StringRequest jr = new StringRequest(Request.Method.POST, url ,new Response.Listener<String>() {
+        NetworkManager.getInstance(getActivity()).stringRequest(Request.Method.POST, url ,new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -252,15 +241,8 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
                     e.printStackTrace();
                 }
             }
-        }, new Response.ErrorListener() {
 
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.i(mTag, "error" + volleyError.getMessage());
-            }
-        });
-
-        mRequestQueue.add(jr);
+        }, null);
 
         //send event
         Intent localIntent =

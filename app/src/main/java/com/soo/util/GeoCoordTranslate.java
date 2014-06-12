@@ -13,6 +13,7 @@ import com.android.volley.toolbox.Volley;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.model.LatLng;
+import com.test.recommand.network.NetworkManager;
 
 import org.json.JSONObject;
 
@@ -29,8 +30,6 @@ public class GeoCoordTranslate {
         void update(LatLng geocode);
     }
 
-    private RequestQueue mRequestQueue;
-
     OnGeoCodeUpdate onGeoCodeUpdate;
 
     public GeoCoordTranslate setUpdateListener (OnGeoCodeUpdate updateListener) {
@@ -38,14 +37,10 @@ public class GeoCoordTranslate {
         return this;
     }
 
-    public GeoCoordTranslate(Context context) {
-
-        if (mRequestQueue == null) {
-            mRequestQueue =  Volley.newRequestQueue(context);
-        }
+    public GeoCoordTranslate() {
     }
 
-    public void GeoCoordTranslateAddressToLatLng(String address) {
+    public void GeoCoordTranslateAddressToLatLng(Context context, String address) {
         //request
         String url = Uri.parse("http://maps.google.com/maps/api/geocode/json")
                 .buildUpon()
@@ -53,12 +48,10 @@ public class GeoCoordTranslate {
                 .appendQueryParameter("sensor", "false")
                 .build().toString();
 
-        JsonObjectRequest jr = new JsonObjectRequest(Request.Method.POST, url , null,new Response.Listener<JSONObject>() {
+        NetworkManager.getInstance(context).jsonRequest(Request.Method.POST, url , null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
-
-                Log.d(mTag, "Response : " + response);
 
                 ObjectMapper om = new ObjectMapper();
 
@@ -84,14 +77,6 @@ public class GeoCoordTranslate {
 
             }
 
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.i(mTag, "error" + volleyError.getMessage());
-            }
-        });
-
-        mRequestQueue.add(jr);
+        }, null);
     }
 }
