@@ -2,16 +2,35 @@ package com.test.recommand.app;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Base64;
+import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.soo.util.AES256Cipher;
+import com.test.recommand.network.NetworkManager;
 import com.test.recommand.view.MainPagerAdapter;
 
 import com.parse.Parse;
-import com.parse.ParseAnalytics;
 import com.parse.ParseInstallation;
 import com.parse.PushService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 
 /**
  * Created by sooyoungbyun on 2014. 6. 2..
@@ -27,6 +46,8 @@ public class MainActivity extends FragmentActivity  {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_activity);
+
+        //loginTest();
 
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -81,5 +102,74 @@ public class MainActivity extends FragmentActivity  {
     protected void onResume() {
 
         super.onResume();
+    }
+
+
+
+    private void loginTest() {
+
+        String e_key = "1758901758901604";
+
+        byte[] keyBytes = new byte[0];
+        try {
+            keyBytes = e_key.getBytes("UTF-8");
+
+            Log.d("TAG", "key bypte : " + keyBytes);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        byte[] ivBytes = { 0x00, 0x00,0x00 ,0x00 ,
+                0x00 ,0x00 ,0x00 ,0x00 ,
+                0x00 ,0x00 ,0x00, 0x00,
+                0x00 ,0x00 ,0x00, 0x00};
+
+        String plainText;
+        byte[] cipherData = new byte[0];
+        String base64Text;
+
+        JSONObject jsonRequest = new JSONObject();
+        try {
+            jsonRequest.put("email", "byunsoo@naver.com");
+            jsonRequest.put("phone_number", "1234556");
+            jsonRequest.put("nick_name", "soo");
+            jsonRequest.put("real_name", "변수영");
+            jsonRequest.put("password", "aaaaaa111");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            cipherData = AES256Cipher.encrypt(ivBytes, keyBytes, jsonRequest.toString().getBytes("UTF-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+
+            Log.d( "tag", "cipher data ::" + cipherData);
+            base64Text = Base64.encodeToString(cipherData, Base64.DEFAULT);
+            Log.d("encrypt ::", base64Text);
+
+            //request
+            String url = Uri.parse("http://192.168.1.152:3000/account/join")
+                    .buildUpon()
+                    .appendQueryParameter("e_key", "12312312312311234")
+                    .appendQueryParameter("params", base64Text)
+                    .build().toString();
+            Log.d("TAG", "url : " + url);
+
+            NetworkManager.getInstance(this).jsonRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+
+                @Override
+                public void onResponse(JSONObject response) {
+                    Log.i("TAG", "join response : " + response.toString());
+                }
+            }, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
