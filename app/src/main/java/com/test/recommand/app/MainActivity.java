@@ -11,25 +11,18 @@ import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.parse.ParseAnalytics;
 import com.soo.util.AES256Cipher;
 import com.test.recommand.network.NetworkManager;
 import com.test.recommand.view.MainPagerAdapter;
 
 import com.parse.Parse;
 import com.parse.ParseInstallation;
-import com.parse.PushService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 
 /**
@@ -94,8 +87,9 @@ public class MainActivity extends FragmentActivity  {
 
         //parse
         Parse.initialize(this, "iyM9J8wFfOos3k2Ek94CIKG3r8yUo6W3fWmBN1k1", "KWeXSsYIzG11a3miS71bywxaBuhaQumhPFTsjLPf");
-        PushService.setDefaultPushCallback(this, MainActivity.class);
+        //PushService.setDefaultPushCallback(this, MainActivity.class);
         ParseInstallation.getCurrentInstallation().saveInBackground();
+        ParseAnalytics.trackAppOpened(getIntent());
     }
 
     @Override
@@ -103,8 +97,6 @@ public class MainActivity extends FragmentActivity  {
 
         super.onResume();
     }
-
-
 
     private void loginTest() {
 

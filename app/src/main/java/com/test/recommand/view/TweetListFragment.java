@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.ParseAnalytics;
 import com.test.recommand.app.R;
 import com.test.recommand.app.RestaurantActivity;
 import com.test.recommand.model.RestaurantTweet;
@@ -105,8 +106,22 @@ public class TweetListFragment extends Fragment {
                 public void run()
                 {
                     if (intent.getAction().toString().equals(Constants.BROADCAST_STATUS_UPDATE))  {
-                        RestaurantTweetList list = (RestaurantTweetList)intent.getSerializableExtra(Constants.DATA_RESTAURANT_TWEET_LIST);
-                        updateListView(list.getRestaurantList());
+                        try
+                        {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    RestaurantTweetList list = (RestaurantTweetList)intent.getSerializableExtra(Constants.DATA_RESTAURANT_TWEET_LIST);
+                                    updateListView(list.getRestaurantList());
+                                }
+                            });
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+
+                            ParseAnalytics.trackEvent("Update Tweet List Exception");
+                        }
                     } else if (intent.getAction().toString().equals(Constants.BROADCAST_LOCATION_UPDATE)) {
 
                         getActivity().stopService(mServiceIntent);
@@ -119,7 +134,7 @@ public class TweetListFragment extends Fragment {
                         //alarm
                         Calendar cal = Calendar.getInstance();
                         AlarmManager am = (AlarmManager) getActivity().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-                        long interval = 1000 * 60 * 3; // 3 minutes in milliseconds
+                        long interval = 1000 * 60 * 10; // 10 minutes in milliseconds
 
                         PendingIntent servicePendingIntent =
                                 PendingIntent.getService(getActivity().getApplicationContext(),
