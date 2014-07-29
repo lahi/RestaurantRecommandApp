@@ -101,60 +101,50 @@ public class TweetListFragment extends Fragment {
 
             Log.d("Update", "action ::" + intent.getAction());
 
-            new Runnable()
-            {
-                public void run()
-                {
-                    if (intent.getAction().toString().equals(Constants.BROADCAST_STATUS_UPDATE))  {
-                        try
-                        {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    RestaurantTweetList list = (RestaurantTweetList)intent.getSerializableExtra(Constants.DATA_RESTAURANT_TWEET_LIST);
-                                    updateListView(list.getRestaurantList());
-                                }
-                            });
+            try {
 
+                if (intent.getAction().toString().equals(Constants.BROADCAST_STATUS_UPDATE))  {
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    RestaurantTweetList list = (RestaurantTweetList)intent.getSerializableExtra(Constants.DATA_RESTAURANT_TWEET_LIST);
+                    updateListView(list.getRestaurantList());
 
-                            ParseAnalytics.trackEvent("Update Tweet List Exception");
-                        }
-                    } else if (intent.getAction().toString().equals(Constants.BROADCAST_LOCATION_UPDATE)) {
+                } else if (intent.getAction().toString().equals(Constants.BROADCAST_LOCATION_UPDATE)) {
 
-                        getActivity().stopService(mServiceIntent);
+                    getActivity().stopService(mServiceIntent);
 
-                        mServiceIntent.putExtra("query", "맛집");
-                        mServiceIntent.putExtra("latitude", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LATITUDE));
-                        mServiceIntent.putExtra("longitude", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LONGITUDE));
-                        mServiceIntent.putExtra("locality", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LOCALITY));
+                    mServiceIntent.putExtra("query", "맛집");
+                    mServiceIntent.putExtra("latitude", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LATITUDE));
+                    mServiceIntent.putExtra("longitude", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LONGITUDE));
+                    mServiceIntent.putExtra("locality", intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LOCALITY));
 
-                        //alarm
-                        Calendar cal = Calendar.getInstance();
-                        AlarmManager am = (AlarmManager) getActivity().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-                        long interval = 1000 * 60 * 10; // 10 minutes in milliseconds
+                    //alarm
+                    Calendar cal = Calendar.getInstance();
+                    AlarmManager am = (AlarmManager) getActivity().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                    long interval = 1000 * 60 * 10; // 10 minutes in milliseconds
 
-                        PendingIntent servicePendingIntent =
-                                PendingIntent.getService(getActivity().getApplicationContext(),
-                                        TweetPullService.SERVICE_ID, // integer constant used to identify the service
-                                        mServiceIntent,
-                                        PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent servicePendingIntent =
+                            PendingIntent.getService(getActivity().getApplicationContext(),
+                                    TweetPullService.SERVICE_ID, // integer constant used to identify the service
+                                    mServiceIntent,
+                                    PendingIntent.FLAG_CANCEL_CURRENT);
 
-                        am.setRepeating(
-                                AlarmManager.RTC_WAKEUP,
-                                cal.getTimeInMillis(),
-                                interval,
-                                servicePendingIntent
-                        );
+                    am.setRepeating(
+                            AlarmManager.RTC_WAKEUP,
+                            cal.getTimeInMillis(),
+                            interval,
+                            servicePendingIntent
+                    );
 
-                        //start
-                        getActivity().startService(mServiceIntent);
-                    }
+                    Log.d("TAG", "Start Activity Tweet");
+
+                    //start
+                    getActivity().startService(mServiceIntent);
                 }
-            };
+            } catch (Exception e) {
 
+                e.printStackTrace();
+                ParseAnalytics.trackEvent("Receiver Exception");
+            }
         }
     }
 }

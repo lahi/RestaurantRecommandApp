@@ -88,7 +88,7 @@ public class TweetPullService extends IntentService {
                 .appendQueryParameter("grant_type", "client_credentials")
                 .build().toString();
 
-        Log.d(mTag, "url : " + url);
+        Log.d(mTag, "tweet auth url : " + url);
 
         final String finalUrlApiKey = urlApiKey;
         final String finalUrlApiSecret = urlApiSecret;
