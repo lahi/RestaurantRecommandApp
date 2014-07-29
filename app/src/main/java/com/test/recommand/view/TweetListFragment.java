@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.style.URLSpan;
@@ -102,6 +103,12 @@ public class TweetListFragment extends Fragment {
             Log.d("Update", "action ::" + intent.getAction());
 
             try {
+
+                if (Looper.myLooper() != Looper.getMainLooper())
+                {
+                    ParseAnalytics.trackEvent("Not Main Thread : TweetUpdateStateReceiver");
+                    return;
+                }
 
                 if (intent.getAction().toString().equals(Constants.BROADCAST_STATUS_UPDATE))  {
 

@@ -9,8 +9,8 @@ android {
         packageName "com.soo.near.restaurant.app"
         minSdkVersion 9
         targetSdkVersion 19
-        versionCode 12
-        versionName "1.2"
+        versionCode 13
+        versionName "1.2.1"
     }
     buildTypes {
         release {
