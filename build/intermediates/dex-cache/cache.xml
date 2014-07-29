@@ -2,24 +2,6 @@
 <pre-dex-items>
 
     <item
-        dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/intermediates/pre-dexed/debug/classes-d1d92c21d4835f808448d12087464fa6202357c7.jar"
-        jar="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/build/intermediates/exploded-aar/com.google.android.gms/play-services/4.2.42/classes.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="e5f81129dfb3d02df80126512bc98278ed2bb40a"/>
-    <item
-        dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/intermediates/pre-dexed/debug/jackson-databind-2.1.5-5fe075f7e95d6102baa65e33ed7841084d0ca421.jar"
-        jar="/Users/sooyoungbyun/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.1.5/47efd9a05d83ef2b86dbde27bb659627a32f0690/jackson-databind-2.1.5.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="47efd9a05d83ef2b86dbde27bb659627a32f0690"/>
-    <item
-        dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
-        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
-    <item
         dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/intermediates/pre-dexed/debug/Parse-1.5.1-6c253ac71fbc392119c361273c4bb33e23cf842a.jar"
         jar="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/libs/Parse-1.5.1.jar"
         jumboMode="false"
@@ -44,6 +26,12 @@
         revision="19.1.0"
         sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
     <item
+        dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/intermediates/pre-dexed/debug/jackson-databind-2.1.5-5fe075f7e95d6102baa65e33ed7841084d0ca421.jar"
+        jar="/Users/sooyoungbyun/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.1.5/47efd9a05d83ef2b86dbde27bb659627a32f0690/jackson-databind-2.1.5.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="47efd9a05d83ef2b86dbde27bb659627a32f0690"/>
+    <item
         dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/intermediates/pre-dexed/debug/jackson-annotations-2.1.5-860d57f3ba7b67fde05799222b1103dd5b108759.jar"
         jar="/Users/sooyoungbyun/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.1.5/ef5b4f8e9aa1a822c2789397cee7d22bc7e96399/jackson-annotations-2.1.5.jar"
         jumboMode="false"
@@ -55,5 +43,17 @@
         jumboMode="false"
         revision="19.1.0"
         sha1="b2e6988baeea1aed656995f973aaa2fc3feaf447"/>
+    <item
+        dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-fe930dc68beb1e566675ce71b270d4091c6c249b.jar"
+        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+    <item
+        dex="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/app/build/intermediates/pre-dexed/debug/classes-5c04bc87bd307d85cc0ccd2b7663d909c23c5ab7.jar"
+        jar="/Users/sooyoungbyun/Projects/RestaurantRecommandApp/build/intermediates/exploded-aar/com.google.android.gms/play-services/5.0.77/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="b6a82434c1eca686607867cd906bcc80ed987837"/>
 
 </pre-dex-items>

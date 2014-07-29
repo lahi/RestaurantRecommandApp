@@ -18,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.parse.ParseAnalytics;
 import com.test.recommand.model.RestaurantTweet;
 import com.test.recommand.model.RestaurantTweetList;
 
@@ -64,10 +65,16 @@ public class TweetPullService extends IntentService {
 
         mIntent = workIntent;
 
-        if (mAccessToken == null)
-            requestTwitterAuth();
-        else
-            requestTweetList();
+        try {
+            if (mAccessToken == null)
+                requestTwitterAuth();
+            else
+                requestTweetList();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            ParseAnalytics.trackEvent("TweetPullService onHandleIntent Exception");
+        }
     }
 
     private void requestTwitterAuth() {

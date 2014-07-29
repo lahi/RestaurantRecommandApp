@@ -100,9 +100,9 @@ public class TweetListFragment extends Fragment {
         @Override
         public void onReceive(Context context, final Intent intent) {
 
-            Log.d("Update", "action ::" + intent.getAction());
-
             try {
+
+                Log.d("Update", "action ::" + intent.getAction());
 
                 if (Looper.myLooper() != Looper.getMainLooper())
                 {
