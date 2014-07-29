@@ -153,18 +153,28 @@ public class TweetPullService extends IntentService {
 
     private void requestTweetList() {
 
-        String queryString = mIntent.getStringExtra("query");
-
         //request
-        String url = Uri.parse(TwitterSearchURL)
-                .buildUpon()
-                .appendQueryParameter("q", mIntent.getStringExtra("locality") + " OR " + queryString + " filter:links")
-                .appendQueryParameter("geocode", mIntent.getStringExtra("latitude")+","+mIntent.getStringExtra("longitude")+","+"1000km")
-                .appendQueryParameter("result_type", "recent")
-                .appendQueryParameter("count","50")
-                .build().toString();
+        String url;
 
-        Log.d(mTag, "url twitter : " + url);
+        try {
+
+            String queryString = mIntent.getStringExtra("query");
+            url = Uri.parse(TwitterSearchURL)
+                    .buildUpon()
+                    .appendQueryParameter("q", mIntent.getStringExtra("locality") + " OR " + queryString + " filter:links")
+                    .appendQueryParameter("geocode", mIntent.getStringExtra("latitude")+","+mIntent.getStringExtra("longitude")+","+"1000km")
+                    .appendQueryParameter("result_type", "recent")
+                    .appendQueryParameter("count","50")
+                    .build().toString();
+
+            Log.d(mTag, "url twitter : " + url);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            ParseAnalytics.trackEvent("RequestTweetList Exception");
+
+            return;
+        }
 
         JsonObjectRequest streamRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 

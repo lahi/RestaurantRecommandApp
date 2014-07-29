@@ -142,8 +142,6 @@ public class TweetListFragment extends Fragment {
                             servicePendingIntent
                     );
 
-                    Log.d("TAG", "Start Activity Tweet");
-
                     //start
                     getActivity().startService(mServiceIntent);
                 }
