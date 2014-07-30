@@ -18,18 +18,15 @@ import com.android.volley.toolbox.Volley;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.parse.ParseAnalytics;
 import com.test.recommand.model.RestaurantTweet;
 import com.test.recommand.model.RestaurantTweetList;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TweetPullService extends IntentService {
@@ -165,8 +162,6 @@ public class TweetPullService extends IntentService {
         } catch (Exception e) {
 
             e.printStackTrace();
-            ParseAnalytics.trackEvent("RequestTweetList Exception");
-
             return;
         }
 

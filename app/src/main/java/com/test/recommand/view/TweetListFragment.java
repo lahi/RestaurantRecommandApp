@@ -19,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.parse.ParseAnalytics;
 import com.test.recommand.app.R;
 import com.test.recommand.app.RestaurantActivity;
 import com.test.recommand.model.RestaurantTweet;
@@ -69,30 +68,34 @@ public class TweetListFragment extends Fragment {
         if (itemList.size() == 0)
             return;
 
-        if (mListView == null) {
-            mListView = (ListView) getActivity().findViewById(R.id.tweet_list_view);
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        try {
+            if (mListView == null) {
+                mListView = (ListView) getActivity().findViewById(R.id.tweet_list_view);
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    try {
-                        URLSpan[] urlSpans = ((TextView)view.findViewById(R.id.tweet_text)).getUrls();
+                        try {
+                            URLSpan[] urlSpans = ((TextView)view.findViewById(R.id.tweet_text)).getUrls();
 
-                        for ( URLSpan urlSpan : urlSpans )
-                        {
-                            Intent intent = new Intent(getActivity(), RestaurantActivity.class);
-                            intent.putExtra("openUrl", urlSpan.getURL());
-                            getActivity().startActivity(intent);
+                            for ( URLSpan urlSpan : urlSpans )
+                            {
+                                Intent intent = new Intent(getActivity(), RestaurantActivity.class);
+                                intent.putExtra("openUrl", urlSpan.getURL());
+                                getActivity().startActivity(intent);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                }
-            });
-        }
+                });
+            }
 
-        TweetListAdapter adapter = new TweetListAdapter(getActivity(), R.layout.tweet_list_item, itemList);
-        mListView.setAdapter(adapter);
+            TweetListAdapter adapter = new TweetListAdapter(getActivity(), R.layout.tweet_list_item, itemList);
+            mListView.setAdapter(adapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private class TweetUpdateStateReceiver extends BroadcastReceiver {
@@ -104,8 +107,12 @@ public class TweetListFragment extends Fragment {
 
             if (intent.getAction().toString().equals(Constants.BROADCAST_STATUS_UPDATE))  {
 
-                RestaurantTweetList list = (RestaurantTweetList)intent.getSerializableExtra(Constants.DATA_RESTAURANT_TWEET_LIST);
-                updateListView(list.getRestaurantList());
+                try {
+                    RestaurantTweetList list = (RestaurantTweetList)intent.getSerializableExtra(Constants.DATA_RESTAURANT_TWEET_LIST);
+                    updateListView(list.getRestaurantList());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             } else if (intent.getAction().toString().equals(Constants.BROADCAST_LOCATION_UPDATE)) {
 

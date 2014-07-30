@@ -6,11 +6,11 @@ android {
 
     defaultConfig {
 
-        packageName "com.soo.near.restaurant.app"
+        applicationId "com.soo.near.restaurant.app"
         minSdkVersion 9
         targetSdkVersion 19
-        versionCode 15
-        versionName "1.2.1"
+        versionCode 18
+        versionName "1.2.2"
     }
     buildTypes {
         release {
