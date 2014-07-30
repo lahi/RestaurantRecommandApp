@@ -65,16 +65,10 @@ public class TweetPullService extends IntentService {
 
         mIntent = workIntent;
 
-        try {
-            if (mAccessToken == null)
-                requestTwitterAuth();
-            else
-                requestTweetList();
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            ParseAnalytics.trackEvent("TweetPullService onHandleIntent Exception");
-        }
+        if (mAccessToken == null)
+            requestTwitterAuth();
+        else
+            requestTweetList();
     }
 
     private void requestTwitterAuth() {
@@ -100,7 +94,7 @@ public class TweetPullService extends IntentService {
         final String finalUrlApiKey = urlApiKey;
         final String finalUrlApiSecret = urlApiSecret;
 
-        JsonObjectRequest jr = new JsonObjectRequest(Request.Method.POST, url , null,new Response.Listener<JSONObject>() {
+        JsonObjectRequest jr = new JsonObjectRequest(Request.Method.POST, url , null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {

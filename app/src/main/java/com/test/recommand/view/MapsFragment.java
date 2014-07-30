@@ -39,6 +39,8 @@ import org.simpleframework.xml.core.Persister;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.lang.Math.abs;
 
@@ -49,8 +51,14 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
     private double currLatitude;
     private double currLongitude;
 
+    private final Map<String, MarkerOptions> mMarkers = new ConcurrentHashMap<String, MarkerOptions>();
+
     public interface OnUpdate {
         void update(RssType rssType);
+    }
+
+    public interface OnReset {
+        void reset();
     }
 
     public interface OnMarkerClicked {
@@ -62,6 +70,7 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
     final private static String mTag = "MapLog";
 
     OnUpdate onUpdate;
+    OnReset onReset;
     OnMarkerClicked markerClicked;
 
     public MapsFragment setUpdateListener (OnUpdate updateListener) {
@@ -69,10 +78,16 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
         return this;
     }
 
+    public MapsFragment setResetListener (OnReset resetListener) {
+        onReset = resetListener;
+        return this;
+    }
+
     public MapsFragment setUpdateMarkerClickListener (OnMarkerClicked markerClickListener) {
         markerClicked = markerClickListener;
         return this;
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,11 +137,18 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
                 trans.setUpdateListener( new GeoCoordTranslate.OnGeoCodeUpdate() {
                     @Override
                     public void update(LatLng geocode) {
-                        mMap.addMarker(new MarkerOptions()
+
+                        if (mMarkers.get(item.getTitle()) != null )
+                            return;
+
+                        MarkerOptions marker = new MarkerOptions()
                                 .position(geocode)
                                 .title(item.getTitle())
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                                .alpha(0.7f));
+                                .alpha(0.7f);
+
+                        mMarkers.put(item.getTitle(), marker);
+                        mMap.addMarker(marker);
                     }
                 });
             }
@@ -160,11 +182,16 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
 
         Log.d(mTag, "on location changed");
 
+        mMap.clear();
+
         //update
         LatLng position = new LatLng(latitude, longitude);
+
         mMap.addMarker(new MarkerOptions().position(position).title("현재 위치"));
         mMap.setOnMarkerClickListener(this);
-        requestNearRestaurant(position);
+
+        onReset.reset();
+        requestNearRestaurant(position, 1);
 
         LatLng latLng = new LatLng(latitude, longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -176,6 +203,12 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
                 .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                 .build();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    public void requestRestaurantMore(int reqPageNum) {
+        //update
+        LatLng position = new LatLng(currLatitude, currLongitude);
+        requestNearRestaurant(position, reqPageNum+1);
     }
 
     @Override
@@ -193,7 +226,9 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
         Log.d(mTag, "onProviderDisabled");
     }
 
-    private void requestNearRestaurant (LatLng position) {
+    private void requestNearRestaurant (LatLng position, int currpageNum) {
+
+        Log.d("TAG", "Request Near Restaurant : " + currpageNum);
 
         // get location address name
         Geocoder geocoder;
@@ -219,8 +254,9 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
                 .appendQueryParameter("key", "c83cbb516fb18f80ba9243ff2af08ced")
                 .appendQueryParameter("query", locality + " " + thorough + " 맛집")
                 .appendQueryParameter("target", "local")
-                .appendQueryParameter("start", "1")
+                .appendQueryParameter("start", "" + currpageNum)
                 .appendQueryParameter("display", "30")
+                .appendQueryParameter("sort", "vote")
                 .build().toString();
         Log.d(mTag, "url : " + url);
 
@@ -229,7 +265,7 @@ public class MapsFragment extends Fragment implements LocationListener, GoogleMa
             @Override
             public void onResponse(String response) {
 
-                Log.i(mTag, "response : " + response.toString());
+                Log.i(mTag, "naver rest response : " + response.toString());
 
                 Serializer serializer = new Persister();
                 try {
