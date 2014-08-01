@@ -152,8 +152,8 @@ public class TweetPullService extends IntentService {
             String queryString = mIntent.getStringExtra("query");
             url = Uri.parse(TwitterSearchURL)
                     .buildUpon()
-                    .appendQueryParameter("q", mIntent.getStringExtra("locality") + " OR " + queryString + " filter:links")
-                    .appendQueryParameter("geocode", mIntent.getStringExtra("latitude")+","+mIntent.getStringExtra("longitude")+","+"1000km")
+                    .appendQueryParameter("q", mIntent.getStringExtra("locality") + " AND " + queryString + " filter:links")
+                    //.appendQueryParameter("geocode", mIntent.getStringExtra("latitude")+","+mIntent.getStringExtra("longitude")+","+"1000km")
                     .appendQueryParameter("result_type", "recent")
                     .appendQueryParameter("count","50")
                     .build().toString();
