@@ -3,6 +3,7 @@ package com.test.recommand.view;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +87,7 @@ public class RestaurantListAdapter extends BaseAdapter {
             final View backgroundView = convertView;
 
             Integer colorFrom = context.getResources().getColor(R.color.white);
-            Integer colorTo = context.getResources().getColor(R.color.darkorange);
+            Integer colorTo = context.getResources().getColor(R.color.darkYellow);
             ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
             colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
@@ -101,7 +102,7 @@ public class RestaurantListAdapter extends BaseAdapter {
             colorAnimation.start();
         }
 
-        h.name.setText(model.getTitle());
+        h.name.setText(Html.fromHtml(model.getTitle()));
         h.category.setText(model.getCategory());
 
 
