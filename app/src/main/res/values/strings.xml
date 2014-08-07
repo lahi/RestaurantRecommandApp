@@ -4,5 +4,6 @@
     <string name="app_name">맛집</string>
     <string name="title_activity_maps">주변 맛집</string>
     <string name="google_maps_key">AIzaSyCpPw-jTKGd0G2QlFN1aqCgtbWi0Az0dwM</string>
-
+    <string name="instagram_client_id">462610d4819346f1ab676542bcbbd624</string>
+    <string name="instagram_secret">016fc0956f2448e38abc751ee136939d</string>
 </resources>
