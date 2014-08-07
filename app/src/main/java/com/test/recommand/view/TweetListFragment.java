@@ -63,8 +63,8 @@ public class TweetListFragment extends Fragment {
     private RequestQueue mRequestQueue;
     private String mAccessToken;
 
-    private String currLatitude;
-    private String currLongitude;
+    //private String currLatitude;
+    //private String currLongitude;
     private String currLocality;
 
 
@@ -135,8 +135,8 @@ public class TweetListFragment extends Fragment {
 
             if (intent.getAction().toString().equals(Constants.BROADCAST_LOCATION_UPDATE)) {
 
-                currLatitude = intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LATITUDE);
-                currLongitude = intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LONGITUDE);
+                //currLatitude = intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LATITUDE);
+                //currLongitude = intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LONGITUDE);
                 currLocality = intent.getStringExtra(Constants.DATA_UPDATE_CURRENT_LOCALITY);
 
                 // update
