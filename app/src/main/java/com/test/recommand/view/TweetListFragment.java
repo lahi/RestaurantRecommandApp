@@ -159,7 +159,7 @@ public class TweetListFragment extends Fragment {
             urlApiSecret = URLEncoder.encode(CONSUMER_SECRET, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
-        } 
+        }
 
         //request
         String url = Uri.parse(TwitterTokenURL)
